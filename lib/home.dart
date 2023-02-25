@@ -1,21 +1,9 @@
+import 'package:counter_provider/povider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,24 +11,58 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('Counter With Provider'),
       ),
       body: Center(
-        child: Text(
-          '$_counter',
-          style: Theme.of(context).textTheme.headline4,
+        child: Consumer<MyProvider>(
+          builder: (context, value, child) {
+            return Text(
+              value.counter.toString(),
+              style: Theme.of(context).textTheme.headline4,
+            );
+          },
         ),
       ),
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: const Color.fromARGB(223, 146, 174, 222),
-        ),
-        child: MaterialButton(
-          minWidth: 60,
-          height: 60,
-          onPressed: () {
-            _incrementCounter();
-          },
-          child: const Icon(Icons.add),
-        ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: const Color.fromARGB(223, 146, 174, 222),
+            ),
+            child: Consumer<MyProvider>(
+              builder: (context, pro, child) {
+                return MaterialButton(
+                  minWidth: 60,
+                  height: 60,
+                  onPressed: () {
+                    pro.incrementCounter();
+                  },
+                  child: const Icon(Icons.add),
+                );
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: const Color.fromARGB(223, 146, 174, 222),
+            ),
+            child: Consumer<MyProvider>(
+              builder: (context, pro, child) {
+                return MaterialButton(
+                  minWidth: 60,
+                  height: 60,
+                  onPressed: () {
+                    pro.decrementCounter();
+                  },
+                  child: const Icon(Icons.remove),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
